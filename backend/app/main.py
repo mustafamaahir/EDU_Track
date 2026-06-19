@@ -15,7 +15,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://holicoaching.vercel.app/",   
+        "https://holicoaching.vercel.app",   
     ],
     allow_credentials=True,
     allow_methods=["*"],
