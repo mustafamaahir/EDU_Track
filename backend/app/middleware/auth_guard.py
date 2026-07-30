@@ -6,26 +6,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-JWT_SECRET = os.environ.get("JWT_SECRET", "change-this-secret-in-production")
-ALGORITHM = "HS256"
-
+JWT_SECRET = os.environ.get("JWT_SECRET", "change-this-secret")
+ALGORITHM  = "HS256"
 bearer_scheme = HTTPBearer()
 
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     token = credentials.credentials
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
-        return payload  # contains: user_id, username, role, class_name
+        return payload
     except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired token"
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
 
 def require_admin(current_user: dict = Depends(get_current_user)):
-    if current_user.get("role") != "admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
-        )
+    if current_user.get("role") not in ("admin", "superadmin"):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
+    return current_user
+
+def require_superadmin(current_user: dict = Depends(get_current_user)):
+    if current_user.get("role") != "superadmin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Super admin access required")
     return current_user
