@@ -9,6 +9,13 @@ class AdminClass(SQLModel, table=True):
     admin_id:   UUID = Field(foreign_key="users.id", index=True)
     class_name: str  = Field(index=True)
 
+class AdminSubject(SQLModel, table=True):
+    __tablename__ = "admin_subjects"
+    id:         UUID = Field(default_factory=uuid4, primary_key=True)
+    admin_id:   UUID = Field(foreign_key="users.id", index=True)
+    class_name: str  = Field(index=True)
+    subject:    str
+
 class User(SQLModel, table=True):
     __tablename__ = "users"
     id:            UUID = Field(default_factory=uuid4, primary_key=True)
@@ -60,3 +67,8 @@ class CreateAdminRequest(BaseModel):
     password: str
     name:     str
     classes:  List[str]
+
+class AssignSubjectsRequest(BaseModel):
+    admin_id:   str
+    class_name: str
+    subjects:   List[str]
