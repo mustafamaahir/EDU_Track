@@ -26,7 +26,7 @@ export default function LeaderboardPage() {
     if (!selectedWeek) return
     setLoading(true)
     setError('')
-    api.get(`/leaderboard/${encodeURIComponent(selectedWeek)}`)
+    api.get(`/leaderboard/student/${encodeURIComponent(selectedWeek)}`)
       .then(res => setLeaderboard(res.data))
       .catch(() => setError('Failed to load leaderboard.'))
       .finally(() => setLoading(false))
