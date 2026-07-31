@@ -50,19 +50,14 @@ def login(body: LoginRequest, session: Session = Depends(get_session)):
         }
     }
 
-
 @router.post("/signup", status_code=201)
 def signup(body: SignupRequest, session: Session = Depends(get_session)):
-    # Check username not already taken
     existing = session.exec(
         select(User).where(User.username == body.username.lower().strip())
     ).first()
 
     if existing:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already taken. Please choose another."
-        )
+        raise HTTPException(status_code=400, detail="Username already taken. Please choose another.")
 
     user = User(
         username=body.username.lower().strip(),
@@ -70,9 +65,8 @@ def signup(body: SignupRequest, session: Session = Depends(get_session)):
         name=body.name.strip(),
         class_name=body.class_name.strip(),
         role="student",
-        status="pending",   # must be approved by admin before login
+        status="pending",
     )
     session.add(user)
     session.commit()
-
     return {"message": "Account created successfully. Please wait for admin approval before logging in."}

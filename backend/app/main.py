@@ -6,7 +6,7 @@ from app.routers import auth, results, leaderboard, admin
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    create_db_and_tables()   # creates tables on startup if they don't exist
+    create_db_and_tables()
     yield
 
 app = FastAPI(title="EduTrack API", version="1.0.0", lifespan=lifespan)
@@ -15,7 +15,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://holicoaching.vercel.app",   
+        "https://your-app.vercel.app",   # replace with your Vercel URL
     ],
     allow_credentials=True,
     allow_methods=["*"],

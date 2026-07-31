@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session, select
 from app.database import get_session
 from app.models import Result, User
@@ -13,39 +13,26 @@ def compute_grade(avg: float) -> str:
     if avg >= 60: return "D"
     return "F"
 
-@router.get("/{week}")
-def get_leaderboard(
-    week: str,
-    current_user: dict = Depends(get_current_user),
-    session: Session = Depends(get_session),
-):
-    class_name = current_user["class_name"]
-
-    # Get all students in the same class
+def get_top3_for_class(week: str, class_name: str, session: Session):
     students = session.exec(
-        select(User).where(User.class_name == class_name, User.role == "student")
+        select(User).where(User.class_name == class_name, User.role == "student", User.status == "approved")
     ).all()
 
     if not students:
-        return {"week": week, "class_name": class_name, "top3": []}
+        return []
 
     student_map = {s.id: s for s in students}
-    student_ids = list(student_map.keys())
-
-    # Get results for those students this week
     results = session.exec(
-        select(Result).where(Result.week == week, Result.student_id.in_(student_ids))
+        select(Result).where(Result.week == week, Result.student_id.in_(list(student_map.keys())))
     ).all()
 
     if not results:
-        return {"week": week, "class_name": class_name, "top3": []}
+        return []
 
-    # Aggregate average per student
     scores_map: dict = {}
     for row in results:
-        sid = row.student_id
         pct = (row.score / row.max_score) * 100
-        scores_map.setdefault(sid, []).append(pct)
+        scores_map.setdefault(row.student_id, []).append(pct)
 
     ranked = []
     for sid, scores in scores_map.items():
@@ -58,6 +45,56 @@ def get_leaderboard(
         })
 
     ranked.sort(key=lambda x: x["average"], reverse=True)
-    top3 = [{"rank": i + 1, **r} for i, r in enumerate(ranked[:3])]
+    return [{"rank": i + 1, **r} for i, r in enumerate(ranked[:3])]
 
+
+@router.get("/student/{week}")
+def get_student_leaderboard(
+    week: str,
+    current_user: dict = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Student view — only their own class."""
+    class_name = current_user["class_name"]
+    top3 = get_top3_for_class(week, class_name, session)
     return {"week": week, "class_name": class_name, "top3": top3}
+
+
+@router.get("/admin/{week}")
+def get_admin_leaderboard(
+    week: str,
+    class_name: str = Query(..., description="Class to filter by"),
+    current_user: dict = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Admin view — filter by any class."""
+    if current_user["role"] not in ("admin", "superadmin"):
+        from fastapi import HTTPException
+        raise HTTPException(status_code=403, detail="Admin access required")
+
+    top3 = get_top3_for_class(week, class_name, session)
+    return {"week": week, "class_name": class_name, "top3": top3}
+
+
+@router.get("/admin/classes/{week}")
+def get_all_classes_leaderboard(
+    week: str,
+    current_user: dict = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Admin view — top 3 for ALL classes in one call."""
+    if current_user["role"] not in ("admin", "superadmin"):
+        from fastapi import HTTPException
+        raise HTTPException(status_code=403, detail="Admin access required")
+
+    classes = session.exec(
+        select(User.class_name).where(User.role == "student", User.status == "approved").distinct()
+    ).all()
+
+    result = []
+    for cls in sorted(set(classes)):
+        if cls:
+            top3 = get_top3_for_class(week, cls, session)
+            result.append({"class_name": cls, "top3": top3})
+
+    return {"week": week, "classes": result}

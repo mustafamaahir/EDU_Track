@@ -26,7 +26,6 @@ def get_my_results(
 
     rows = session.exec(query.order_by(Result.week)).all()
 
-    # Group by week
     weeks_map: dict = {}
     for row in rows:
         w = row.week

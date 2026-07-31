@@ -256,3 +256,36 @@ def get_weeks(
 ):
     rows = session.exec(select(Result.week).distinct()).all()
     return {"weeks": sorted(set(rows))}
+
+
+# ── Superadmin: assign student to class ──────────────────────────
+
+@router.patch("/assign-student/{student_id}")
+def assign_student_class(
+    student_id: UUID,
+    class_name: str,
+    superadmin: dict = Depends(require_superadmin),
+    session: Session = Depends(get_session),
+):
+    student = session.get(User, student_id)
+    if not student or student.role != "student":
+        raise HTTPException(status_code=404, detail="Student not found")
+    student.class_name = class_name.strip()
+    session.add(student)
+    session.commit()
+    return {"message": f"{student.name} assigned to {class_name}."}
+
+@router.get("/all-students")
+def get_all_students_superadmin(
+    superadmin: dict = Depends(require_superadmin),
+    session: Session = Depends(get_session),
+):
+    students = session.exec(
+        select(User).where(User.role == "student").order_by(User.class_name, User.name)
+    ).all()
+    return {
+        "students": [
+            {"id": str(s.id), "username": s.username, "name": s.name, "class_name": s.class_name, "status": s.status}
+            for s in students
+        ]
+    }
