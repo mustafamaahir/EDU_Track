@@ -438,8 +438,8 @@ function AssignStudentsTab() {
 }
 
 const s = {
-  page:{ minHeight:'100vh', background:'#fdf4ff', padding:'2.5rem 1.5rem' },
-  container:{ maxWidth:980, margin:'0 auto' },
+  page:{ minHeight:'100vh', width:'100%', background:'#fdf4ff', padding:'2.5rem 1.5rem' },
+  container:{ maxWidth:980, margin:'0 auto', width:'100%'},
   pageHeader:{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'1.5rem' },
   title:{ fontFamily:'"Georgia",serif', fontSize:'1.75rem', color:'#1f2937', margin:0 },
   badge:{ padding:'0.3rem 0.9rem', background:'#f5f0ff', color:'#7c3aed', borderRadius:999, fontSize:'0.85rem', fontWeight:600 },
@@ -467,7 +467,7 @@ const s = {
   label:{ fontSize:'0.75rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', color:'#6b7280' },
   input:{ padding:'0.65rem 0.9rem', border:'1.5px solid #e9d5ff', borderRadius:8, fontFamily:'inherit', fontSize:'0.9rem', outline:'none' },
   classTag:{ padding:'0.75rem 1.5rem', background:'#faf5ff', borderBottom:'1px solid #e9d5ff', fontSize:'0.85rem', fontWeight:600, color:'#7c3aed', borderTopLeftRadius:14, borderTopRightRadius:14 },
-  tableWrap:{ background:'#fff', border:'1px solid #e9d5ff', borderRadius:14, overflow:'auto', marginBottom:'1.5rem' },
+  tableWrap:{ background:'#fff', border:'1px solid #e9d5ff', borderRadius:14, overflow:'auto', marginBottom:'1.5rem', WebkitOverflowScrolling:'touch' },
   table:{ width:'100%', borderCollapse:'collapse' },
   th:{ padding:'0.65rem 1rem', background:'#faf5ff', fontSize:'0.75rem', fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', color:'#7c3aed', textAlign:'left', borderBottom:'1px solid #e9d5ff' },
   td:{ padding:'0.75rem 1rem', borderBottom:'1px solid #faf5ff', fontSize:'0.9rem', color:'#374151' },

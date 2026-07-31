@@ -75,8 +75,8 @@ export default function StudentDashboard() {
 }
 
 const styles = {
-  page:      { minHeight: '100vh', background: '#fdf4ff', padding: '2.5rem 1.5rem' },
-  container: { maxWidth: 860, margin: '0 auto' },
+  page:      { minHeight: '100vh', width:'100%', background: '#fdf4ff', padding: '2.5rem 1.5rem' },
+  container: { width:'100%', maxWidth: 860, margin: '0 auto' },
   pageHeader: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem',
