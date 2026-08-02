@@ -9,7 +9,7 @@ async def lifespan(app: FastAPI):
     create_db_and_tables()
     yield
 
-app = FastAPI(title="EduTrack API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="ResultTracker API", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

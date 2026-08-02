@@ -2,9 +2,9 @@ export function AboutPage() {
   return (
     <div style={pg}>
       <div style={wrap}>
-        <h1 style={title}>About EduTrack</h1>
+        <h1 style={title}>About ResultTracker</h1>
         <p style={body}>
-          EduTrack is the official student results portal of <strong>Greenfield Academy</strong>.
+          ResultTracker is the official student results portal of <strong>DAARUL FAOZ MADRASAH</strong>.
           It provides students with secure, instant access to their academic results each week.
         </p>
         <div style={grid}>
@@ -32,9 +32,9 @@ export function ContactPage() {
         <p style={body}>For any issues accessing your account or your results, please reach out through one of these channels.</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '2rem' }}>
           {[
-            { icon: '🏫', label: 'School Office',    val: 'Visit the main office between 8am – 3pm on school days.' },
-            { icon: '📧', label: 'Email',             val: 'admin@greenfield.edu.gh' },
-            { icon: '📞', label: 'Phone',             val: '+233 XX XXX XXXX' },
+            { icon: '🏫', label: 'School Office',    val: 'Visit the main office between 8am – 1pm only during activties hour.' },
+            { icon: '📧', label: 'Email',             val: 'admin@daarulfaoz.edu.gh' },
+            { icon: '📞', label: 'Phone',             val: '+234 8058 6916 36' },
           ].map(c => (
             <div key={c.label} style={contactRow}>
               <span style={{ fontSize: '1.75rem' }}>{c.icon}</span>

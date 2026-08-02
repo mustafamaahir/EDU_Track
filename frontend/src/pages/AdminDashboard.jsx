@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/client'
 
-const ALL_CLASSES = ['Form 1A','Form 1B','Form 2A','Form 2B','Form 3A','Form 3B']
+const ALL_CLASSES = ['Class 1A','Class 1B','Class 2A','Class 2B','Class 3A','Class 3B']
 
 export default function AdminDashboard() {
   const { user } = useAuth()

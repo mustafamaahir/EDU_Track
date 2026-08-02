@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../api/client'
 
-const CLASSES = ['Form 1A', 'Form 1B', 'Form 2A', 'Form 2B', 'Form 3A', 'Form 3B']
+const CLASSES = ['Class 1A','Class 1B','Class 2A','Class 2B','Class 3A','Class 3B']
 
 export default function SignupPage() {
   const navigate = useNavigate()
