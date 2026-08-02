@@ -20,7 +20,7 @@ export default function HomePage() {
           <div style={styles.badge}>🎓 Welcome to</div>
           <h1 style={styles.heroTitle}>
             {/* Replace with your school name */}
-            Greenfield Academy
+            DAARUL FAOZ MADRASAH
           </h1>
           <p style={styles.motto}>
             "Nurturing Excellence, Building Futures"
@@ -73,7 +73,7 @@ export default function HomePage() {
 
       {/* ── Footer ── */}
       <footer style={styles.footer}>
-        <p>© {new Date().getFullYear()} Greenfield Academy · EduTrack Portal</p>
+        <p>© {new Date().getFullYear()} DAARUL FAOZ MADRASAH · EduTrack Portal</p>
         <p style={{ marginTop: '0.25rem', fontSize: '0.78rem', color: '#c4b5fd' }}>
           For technical support, contact the school administration.
         </p>

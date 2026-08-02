@@ -2,9 +2,9 @@ export function AboutPage() {
   return (
     <div style={pg}>
       <div style={wrap}>
-        <h1 style={title}>About ResultTracker</h1>
+        <h1 style={title}>About EduTrack</h1>
         <p style={body}>
-          ResultTracker is the official student results portal of <strong>DAARUL FAOZ MADRASAH</strong>.
+          EduTrack is the official student results portal of <strong>DAARUL FAOZ MADRASAH</strong>.
           It provides students with secure, instant access to their academic results each week.
         </p>
         <div style={grid}>
