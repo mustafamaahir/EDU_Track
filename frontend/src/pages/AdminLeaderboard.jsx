@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import api from '../api/client'
 import Podium from '../components/Podium'
 
-const ALL_CLASSES = ['Class 1A','Class 1B','Class 2A','Class 2B','Class 3A','Class 3B']
+const ALL_CLASSES = ['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', 'Rawda', 'Dhikr']
 
 export default function AdminLeaderboard() {
   const [weeks, setWeeks]           = useState([])

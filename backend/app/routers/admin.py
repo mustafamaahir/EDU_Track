@@ -9,7 +9,7 @@ from app.middleware.auth_guard import require_admin, require_superadmin
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-MASTER_SUBJECTS = ["Arobiyyah", "Qiroohah", "Memorization", "Writing", "Hadith"]
+MASTER_SUBJECTS = ["Arobiyyah", "Qiroohah", "Memorization", "Writing", "General Knowledge"]
 
 # ── Superadmin: manage admins ─────────────────────────────────────
 
