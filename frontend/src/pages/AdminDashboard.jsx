@@ -8,6 +8,7 @@ const ALL_CLASSES = ['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', '
 export default function AdminDashboard() {
   const { user } = useAuth()
   const isSuperAdmin = user?.role === 'superadmin'
+console.log('user role:', user?.role, 'isSuperAdmin:', isSuperAdmin)
   const TABS = isSuperAdmin
     ? ['Pending Approvals','Upload Results','Manage Admins','Assign Students','Week Settings']
     : ['Pending Approvals','Upload Results']
@@ -152,7 +153,7 @@ function UploadTab() {
       <div style={s.controls}>
         <div style={s.field}>
           <label style={s.label}>Week</label>
-          <input value={week} onChange={e=>setWeek(e.target.value)} placeholder="e.g. Week 4" style={s.input}/>
+          <input value={week} onChange={e=>setWeek(e.target.value.toLowerCase())} placeholder="e.g. Week 4" style={s.input}/>
         </div>
         <div style={s.field}>
           <label style={s.label}>Class</label>

@@ -43,7 +43,7 @@ export default function WeekSettingsTab() {
           <div style={s.field}>
             <label style={s.label}>Week</label>
             <input value={form.week}
-              onChange={e => setForm(p=>({...p,week:e.target.value}))}
+              onChange={e => setForm(p=>({...p,week:e.target.value.toLowerCase()}))}
               style={s.input} placeholder="e.g. Week 1" required />
           </div>
           <div style={s.field}>
