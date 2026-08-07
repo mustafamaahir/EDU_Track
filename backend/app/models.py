@@ -3,6 +3,7 @@ from uuid import UUID, uuid4
 from sqlmodel import SQLModel, Field, Relationship
 from pydantic import BaseModel
 
+
 class AdminClass(SQLModel, table=True):
     __tablename__ = "admin_classes"
     id:         UUID = Field(default_factory=uuid4, primary_key=True)

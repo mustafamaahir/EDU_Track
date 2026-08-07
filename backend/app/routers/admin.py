@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from uuid import UUID
 from passlib.context import CryptContext
 from app.database import get_session
-from app.models import User, Result, AdminClass, AdminSubject, UploadResultsRequest, CreateAdminRequest, AssignSubjectsRequest
+from app.models import User, Result, AdminClass, AdminSubject, UploadResultsRequest, CreateAdminRequest, AssignSubjectsRequest, WeekSettings
 from app.middleware.auth_guard import require_admin, require_superadmin
 
 router = APIRouter()
