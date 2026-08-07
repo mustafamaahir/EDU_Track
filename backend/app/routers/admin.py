@@ -5,6 +5,7 @@ from passlib.context import CryptContext
 from app.database import get_session
 from app.models import User, Result, AdminClass, AdminSubject, UploadResultsRequest, CreateAdminRequest, AssignSubjectsRequest, WeekSettings
 from app.middleware.auth_guard import require_admin, require_superadmin
+from pydantic import BaseModel
 
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
