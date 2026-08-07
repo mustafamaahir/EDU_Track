@@ -9,13 +9,6 @@ class AdminClass(SQLModel, table=True):
     admin_id:   UUID = Field(foreign_key="users.id", index=True)
     class_name: str  = Field(index=True)
 
-class AdminSubject(SQLModel, table=True):
-    __tablename__ = "admin_subjects"
-    id:         UUID = Field(default_factory=uuid4, primary_key=True)
-    admin_id:   UUID = Field(foreign_key="users.id", index=True)
-    class_name: str  = Field(index=True)
-    subject:    str
-
 class User(SQLModel, table=True):
     __tablename__ = "users"
     id:            UUID = Field(default_factory=uuid4, primary_key=True)
@@ -68,7 +61,24 @@ class CreateAdminRequest(BaseModel):
     name:     str
     classes:  List[str]
 
+
+class AdminSubject(SQLModel, table=True):
+    __tablename__ = "admin_subjects"
+    id:         UUID = Field(default_factory=uuid4, primary_key=True)
+    admin_id:   UUID = Field(foreign_key="users.id", index=True)
+    class_name: str  = Field(index=True)
+    subject:    str
+
+
 class AssignSubjectsRequest(BaseModel):
     admin_id:   str
     class_name: str
     subjects:   List[str]
+
+
+class WeekSettings(SQLModel, table=True):
+    __tablename__ = "week_settings"
+    id:             UUID    = Field(default_factory=uuid4, primary_key=True)
+    week:           str     = Field(unique=True, index=True)
+    tiebreaker:     str     = Field(default="")
+    results_locked: bool    = Field(default=True)

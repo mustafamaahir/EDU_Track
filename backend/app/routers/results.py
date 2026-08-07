@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlmodel import Session, select
 from app.database import get_session
-from app.models import Result, User
+from app.models import Result, User, WeekSettings
 from app.middleware.auth_guard import get_current_user
 from uuid import UUID
 
@@ -20,6 +20,12 @@ def get_my_results(
     current_user: dict = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
+    # Check lock for specific week or all weeks
+    if week:
+        settings = session.exec(select(WeekSettings).where(WeekSettings.week == week)).first()
+        if settings and settings.results_locked:
+            raise HTTPException(status_code=403, detail="LOCKED")
+    
     query = select(Result).where(Result.student_id == UUID(current_user["user_id"]))
     if week:
         query = query.where(Result.week == week)
@@ -29,6 +35,11 @@ def get_my_results(
     weeks_map: dict = {}
     for row in rows:
         w = row.week
+        # Skip locked weeks when fetching all
+        if not week:
+            ws = session.exec(select(WeekSettings).where(WeekSettings.week == w)).first()
+            if ws and ws.results_locked:
+                continue
         if w not in weeks_map:
             weeks_map[w] = {"week": w, "subjects": []}
         pct = round((row.score / row.max_score) * 100, 1)
@@ -54,6 +65,21 @@ def get_my_results(
     return {"results": result_list}
 
 @router.get("/weeks")
-def get_weeks(session: Session = Depends(get_session)):
+def get_weeks(
+    current_user: dict = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
     rows = session.exec(select(Result.week).distinct()).all()
-    return {"weeks": sorted(set(rows))}
+    all_weeks = sorted(set(rows))
+    
+    role = current_user.get("role", "student")
+    if role == "student":
+        # Only return unlocked weeks for students
+        unlocked = []
+        for w in all_weeks:
+            ws = session.exec(select(WeekSettings).where(WeekSettings.week == w)).first()
+            if not ws or not ws.results_locked:
+                unlocked.append(w)
+        return {"weeks": unlocked}
+    
+    return {"weeks": all_weeks}

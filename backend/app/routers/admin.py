@@ -380,3 +380,37 @@ def get_weeks(
 ):
     rows = session.exec(select(Result.week).distinct()).all()
     return {"weeks": sorted(set(rows))}
+
+
+# ── Superadmin: week settings ─────────────────────────────────────
+
+from app.models import WeekSettings
+
+class WeekSettingsRequest(BaseModel):
+    week:           str
+    tiebreaker:     str  = ""
+    results_locked: bool = True
+
+@router.get("/week-settings")
+def get_week_settings(
+    admin: dict = Depends(require_admin),
+    session: Session = Depends(get_session),
+):
+    settings = session.exec(select(WeekSettings)).all()
+    return {"settings": [{"week": s.week, "tiebreaker": s.tiebreaker, "results_locked": s.results_locked} for s in settings]}
+
+@router.post("/week-settings")
+def upsert_week_settings(
+    body: WeekSettingsRequest,
+    superadmin: dict = Depends(require_superadmin),
+    session: Session = Depends(get_session),
+):
+    existing = session.exec(select(WeekSettings).where(WeekSettings.week == body.week)).first()
+    if existing:
+        existing.tiebreaker     = body.tiebreaker
+        existing.results_locked = body.results_locked
+        session.add(existing)
+    else:
+        session.add(WeekSettings(week=body.week, tiebreaker=body.tiebreaker, results_locked=body.results_locked))
+    session.commit()
+    return {"message": f"Settings for {body.week} saved."}
