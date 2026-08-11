@@ -61,7 +61,7 @@ def get_top3_for_class(week: str, class_name: str, session: Session, tiebreaker:
     # Sort: primary = average DESC, secondary = tiebreaker_score DESC
     ranked.sort(key=lambda x: (x["average"], x["tiebreaker_score"]), reverse=True)
 
-    return [{"rank": i + 1, **r} for i, r in enumerate(ranked[:3])]
+    return [{"rank": i + 1, **r} for i, r in enumerate(ranked)]
 
 
 @router.get("/student/{week}")
