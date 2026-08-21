@@ -29,7 +29,7 @@ export default function App() {
             <ProtectedRoute><StudentDashboard /></ProtectedRoute>
           }/>
           <Route path="/leaderboard" element={
-            <ProtectedRoute><LeaderboardPage /></ProtectedRoute>
+            <ProtectedRoute adminOnly><LeaderboardPage /></ProtectedRoute>
           }/>
 
           {/* Admin + Superadmin */}

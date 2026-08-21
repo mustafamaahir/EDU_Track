@@ -14,7 +14,6 @@ export default function Navbar() {
     { label: 'Home',        path: '/' },
     ...(isStudent ? [
       { label: 'Results',     path: '/dashboard' },
-      { label: 'Leaderboard', path: '/leaderboard' },
     ] : []),
     ...(isAdmin ? [
       { label: 'Dashboard',   path: '/admin' },
