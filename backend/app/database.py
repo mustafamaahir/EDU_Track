@@ -12,8 +12,8 @@ engine = create_engine(
     connect_args={"options": "-c statement_timeout=30000"},
 )
 
-# def create_db_and_tables():
-#     SQLModel.metadata.create_all(engine)
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
 
 def get_session():
     with Session(engine) as session:
