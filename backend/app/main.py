@@ -9,7 +9,7 @@ from app.routers import auth, results, leaderboard, admin
 #     create_db_and_tables()
 #     yield
 
-app = FastAPI(title="EduTrack API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="EduTrack API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
