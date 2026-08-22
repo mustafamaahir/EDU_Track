@@ -93,7 +93,6 @@ function UploadTab() {
   const [week, setWeek]             = useState('')
   const [scores, setScores]         = useState({})
   const [weeks, setWeeks]           = useState([])
-  const [newWeek, setNewWeek]       = useState('')
   const [msg, setMsg]               = useState('')
   const [error, setError]           = useState('')
   const [loading, setLoading]       = useState(false)
