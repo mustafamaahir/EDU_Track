@@ -92,7 +92,6 @@ function UploadTab() {
   const [selClass, setSelClass]     = useState('')
   const [week, setWeek]             = useState('')
   const [scores, setScores]         = useState({})
-  const [weeks, setWeeks]           = useState([])
   const [msg, setMsg]               = useState('')
   const [error, setError]           = useState('')
   const [loading, setLoading]       = useState(false)
@@ -103,7 +102,6 @@ function UploadTab() {
     if(user?.role==='superadmin') setMyClasses(ALL_CLASSES)
     else api.get('/admin/my-classes').then(r=>setMyClasses(r.data.classes))
     api.get('/admin/students').then(r=>setStudents(r.data.students))
-    api.get('/admin/weeks').then(r=>setWeeks(r.data.weeks))
   },[])
 
   // Load subjects when class changes
@@ -152,16 +150,18 @@ function UploadTab() {
 
   return (
     <div>
-      <div style={s.field}>
-      <label style={s.label}>Week</label>
-      <select
-        value={week}
-        onChange={e => setWeek(e.target.value)}
-        style={s.input}
-      >
-      <option value="">Select week</option>
-        {weeks.map(w => <option key={w} value={w}>{w}</option>)}
-      </select>
+      <div style={s.controls}>
+        <div style={s.field}>
+          <label style={s.label}>Week</label>
+          <input value={week} onChange={e=>setWeek(e.target.value.toLowerCase())} placeholder="e.g. Week 4" style={s.input}/>
+        </div>
+        <div style={s.field}>
+          <label style={s.label}>Class</label>
+          <select value={selClass} onChange={e=>setSelClass(e.target.value)} style={s.input}>
+            <option value="">Select class</option>
+            {myClasses.map(c=><option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
       </div>
 
       {selClass && subjects.length===0 && (
