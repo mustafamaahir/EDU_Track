@@ -154,27 +154,15 @@ function UploadTab() {
   return (
     <div>
       <div style={s.field}>
-        <label style={s.label}>Week</label>
-        <select
-          value={weeks.includes(week) ? week : week === '' ? '' : '__new__'}
-          onChange={e => {
-            if(e.target.value === '__new__') setWeek('')
-            else setWeek(e.target.value)
-          }}
-          style={s.input}
-        >
-          <option value="">Select week</option>
-          {weeks.map(w => <option key={w} value={w}>{w}</option>)}
-          <option value="__new__">+ New week</option>
-        </select>
-        {!weeks.includes(week) && (
-          <input
-            value={week}
-            onChange={e => setWeek(e.target.value.toLowerCase())}
-            placeholder="type new week e.g. week 4"
-            style={{...s.input, marginTop:'0.5rem'}}
-          />
-        )}
+      <label style={s.label}>Week</label>
+      <select
+        value={week}
+        onChange={e => setWeek(e.target.value)}
+        style={s.input}
+      >
+      <option value="">Select week</option>
+        {weeks.map(w => <option key={w} value={w}>{w}</option>)}
+      </select>
       </div>
 
       {selClass && subjects.length===0 && (
