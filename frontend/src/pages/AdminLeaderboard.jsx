@@ -5,10 +5,10 @@ import Podium from '../components/Podium'
 
 export default function AdminLeaderboard() {
   const { user } = useAuth()
+  const [myClasses, setMyClasses] = useState([])
   const [weeks, setWeeks]           = useState([])
   const [selectedWeek, setWeek]     = useState('')
   const [selectedClass, setClass]   = useState('')
-  const [myClasses, setMyClasses] = useState([])
   const [leaderboard, setLeaderboard] = useState(null)
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState('')
