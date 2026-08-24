@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlmodel import Session, select
 from app.database import get_session
-from app.models import Result, User, WeekSettings
+from app.models import Result, User, WeekSettings, AdminClass
 from app.middleware.auth_guard import get_current_user
 
 router = APIRouter()
@@ -90,6 +90,16 @@ def get_admin_leaderboard(
 ):
     if current_user["role"] not in ("admin", "superadmin"):
         raise HTTPException(status_code=403, detail="Admin access required")
+
+    if current_user["role"] == "admin":
+        owns_class = session.exec(
+            select(AdminClass).where(
+                AdminClass.admin_id == current_user["id"],
+                AdminClass.class_name == class_name,
+            )
+        ).first()
+        if not owns_class:
+            raise HTTPException(status_code=403, detail="Not authorized for this class")
 
     settings   = session.exec(select(WeekSettings).where(WeekSettings.week == week)).first()
     tiebreaker = settings.tiebreaker if settings else ""
