@@ -3,8 +3,6 @@ import api from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import Podium from '../components/Podium'
 
-const ALL_CLASSES = ['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', 'Rawda', 'Dhikr']
-
 export default function AdminLeaderboard() {
   const { user } = useAuth()
   const [weeks, setWeeks]           = useState([])
@@ -17,7 +15,7 @@ export default function AdminLeaderboard() {
 
   useEffect(() => {
     if(user?.role === 'superadmin') {
-      setMyClasses(ALL_CLASSES)
+      setMyClasses(['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', 'Rawda', 'Dhikr'])
     } else {
       api.get('/admin/my-classes').then(r => setMyClasses(r.data.classes))
     }
