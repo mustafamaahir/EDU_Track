@@ -97,65 +97,60 @@ def get_admin_leaderboard(
     return {"week": week, "class_name": class_name, "top3": top3, "tiebreaker": tiebreaker}
 
 
+
 @router.get("/admin/classes/{week}")
-@router.get("/admin/classes/{week}")
-def get_all_classes_leaderboard(
+def get_admin_leaderboard(
     week: str,
+    class_name: str,
     current_user: dict = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
+    # Only admins and superadmins can access this endpoint
     if current_user["role"] not in ("admin", "superadmin"):
         raise HTTPException(
             status_code=403,
             detail="Admin access required"
         )
 
+    # Get week settings
     settings = session.exec(
-        select(WeekSettings).where(WeekSettings.week == week)
+        select(WeekSettings)
+        .where(WeekSettings.week == week)
     ).first()
 
     tiebreaker = settings.tiebreaker if settings else ""
 
-    # Superadmin can see every class
+    # Superadmin can access any class
     if current_user["role"] == "superadmin":
+        pass
 
-        classes = session.exec(
-            select(User.class_name)
-            .where(
-                User.role == "student",
-                User.status == "approved"
-            )
-            .distinct()
-        ).all()
-
+    # Normal admin can only access assigned classes
     else:
-
-        classes = session.exec(
-            select(AdminClass.class_name)
+        assignment = session.exec(
+            select(AdminClass)
             .where(
-                AdminClass.admin_id == current_user["id"]
+                AdminClass.admin_id == current_user["id"],
+                AdminClass.class_name == class_name
             )
-            .distinct()
-        ).all()
+        ).first()
 
-    result = []
-
-    for cls in sorted(set(classes)):
-        if cls:
-            top3 = get_top3_for_class(
-                week,
-                cls,
-                session,
-                tiebreaker
+        if not assignment:
+            raise HTTPException(
+                status_code=403,
+                detail="You are not assigned to this class"
             )
 
-            result.append({
-                "class_name": cls,
-                "top3": top3
-            })
+    # Get leaderboard only after authorization succeeds
+    top3 = get_top3_for_class(
+        week,
+        class_name,
+        session,
+        tiebreaker
+    )
 
     return {
         "week": week,
-        "classes": result,
+        "class_name": class_name,
+        "top3": top3,
         "tiebreaker": tiebreaker
     }
