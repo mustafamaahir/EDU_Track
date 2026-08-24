@@ -94,7 +94,7 @@ def get_admin_leaderboard(
     if current_user["role"] == "admin":
         owns_class = session.exec(
             select(AdminClass).where(
-                AdminClass.admin_id == current_user["id"],
+                AdminClass.id == current_user["id"],
                 AdminClass.class_name == class_name,
             )
         ).first()
