@@ -13,21 +13,6 @@ def compute_grade(avg: float) -> str:
     if avg >= 60: return "D"
     return "F"
 
-
-def is_admin_for_class(session: Session, admin_id: int, class_name: str) -> bool:
-    """Return True when the admin owns this class."""
-    if not class_name or admin_id is None:
-        return False
-
-    ownership = session.exec(
-        select(AdminClass).where(
-            AdminClass.admin_id == admin_id,
-            AdminClass.class_name == class_name,
-        )
-    ).first()
-    return ownership is not None
-
-
 def get_top3_for_class(week: str, class_name: str, session: Session, tiebreaker: str = ""):
     students = session.exec(
         select(User).where(
@@ -107,7 +92,13 @@ def get_admin_leaderboard(
         raise HTTPException(status_code=403, detail="Admin access required")
 
     if current_user["role"] == "admin":
-        if not is_admin_for_class(session, current_user["admin_id"], class_name):
+        owns_class = session.exec(
+            select(AdminClass).where(
+                AdminClass.admin_id == current_user["admin_id"],
+                AdminClass.class_name == class_name,
+            )
+        ).first()
+        if not owns_class:
             raise HTTPException(status_code=403, detail="Not authorized for this class")
 
     settings   = session.exec(select(WeekSettings).where(WeekSettings.week == week)).first()
