@@ -1,18 +1,26 @@
 import { useState, useEffect } from 'react'
 import api from '../api/client'
+import { useAuth } from '../context/AuthContext'
 import Podium from '../components/Podium'
 
 const ALL_CLASSES = ['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', 'Rawda', 'Dhikr']
 
 export default function AdminLeaderboard() {
+  const { user } = useAuth()
   const [weeks, setWeeks]           = useState([])
   const [selectedWeek, setWeek]     = useState('')
   const [selectedClass, setClass]   = useState('')
+  const [myClasses, setMyClasses] = useState([])
   const [leaderboard, setLeaderboard] = useState(null)
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState('')
 
   useEffect(() => {
+    if(user?.role === 'superadmin') {
+      setMyClasses(ALL_CLASSES)
+    } else {
+      api.get('/admin/my-classes').then(r => setMyClasses(r.data.classes))
+    }
     api.get('/results/weeks').then(r => {
       const w = r.data.weeks
       setWeeks(w)
@@ -46,7 +54,7 @@ export default function AdminLeaderboard() {
             <label style={styles.label}>Class</label>
             <select value={selectedClass} onChange={e => setClass(e.target.value)} style={styles.input}>
               <option value="">Select class</option>
-              {ALL_CLASSES.map(c => <option key={c} value={c}>{c}</option>)}
+              {myClasses.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
         </div>

@@ -380,7 +380,11 @@ def get_weeks(
     session: Session = Depends(get_session),
 ):
     rows = session.exec(select(Result.week).distinct()).all()
-    return {"weeks": sorted(set(rows))}
+    existing = sorted(set(rows))
+    # Always include week 1-7 as base options
+    base = [f"week {i}" for i in range(1, 8)]
+    all_weeks = sorted(set(base + existing))
+    return {"weeks": all_weeks}
 
 
 # ── Superadmin: week settings ─────────────────────────────────────
