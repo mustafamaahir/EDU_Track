@@ -107,7 +107,7 @@ def get_admin_leaderboard(
         raise HTTPException(status_code=403, detail="Admin access required")
 
     if current_user["role"] == "admin":
-        if not is_admin_for_class(session, current_user["id"], class_name):
+        if not is_admin_for_class(session, current_user["admin_id"], class_name):
             raise HTTPException(status_code=403, detail="Not authorized for this class")
 
     settings   = session.exec(select(WeekSettings).where(WeekSettings.week == week)).first()
