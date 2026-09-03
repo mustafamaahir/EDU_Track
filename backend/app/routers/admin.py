@@ -10,7 +10,7 @@ from pydantic import BaseModel
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-MASTER_SUBJECTS = ["Arobiyyah", "Qiroohah", "Memorization", "Writing", "General Knowledge", "Tajweed"]
+MASTER_SUBJECTS = ["Arobiyyah", "Qiroohah", "Memorization", "Writing", "General Knowledge", "Tajweed", "Taoheed", "Fiqh", "Hadith"]
 
 # ── Superadmin: manage admins ─────────────────────────────────────
 

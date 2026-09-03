@@ -15,7 +15,7 @@ export default function AdminLeaderboard() {
 
   useEffect(() => {
     if(user?.role === 'superadmin') {
-      setMyClasses(['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', 'Rawda', 'Dhikr'])
+      setMyClasses(['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', 'Rawda', 'Dhikr', 'Adult 1', 'Adult 2'])
     } else {
       api.get('/admin/my-classes').then(r => setMyClasses(r.data.classes))
     }

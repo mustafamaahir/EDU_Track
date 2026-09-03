@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import api from '../api/client'
 import WeekSettingsTab from './WeekSettingsTab'
 
-const ALL_CLASSES = ['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', 'Rawda', 'Dhikr']
+const ALL_CLASSES = ['Dhahab','Fidda','Ihsaan','Thaqaafah','Thawaab','Taqwah', 'Rawda', 'Dhikr', 'Adult 1', 'Adult 2']
 
 export default function AdminDashboard() {
   const { user } = useAuth()
